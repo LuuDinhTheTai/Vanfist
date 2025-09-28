@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Vanfist.Entities.Model>
+
+@{
+    ViewData["Title"] = "Danh sách mẫu xe";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Chưa có mẫu xe nào.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Danh mục</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("N0") ₫</td>
+                    <td>@item.Category?.Name</td>
+                    <td class="text-end">
+                        <a asp-controller="Model" asp-action="Details" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-primary">
+                            Xem chi tiết
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

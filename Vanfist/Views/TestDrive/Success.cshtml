@@ -1,0 +1,16 @@
+﻿@model Vanfist.DTOs.Responses.TestDriveRequestItem
+@{
+    ViewData["Title"] = "Đăng ký thành công";
+}
+<div class="alert alert-success mt-3">
+    <h4>@ViewData["Title"]</h4>
+    <p>Cảm ơn @Model.FullName. Chúng tôi sẽ liên hệ sớm.</p>
+    <ul class="mb-0">
+        <li>Điện thoại: @Model.Phone</li>
+        <li>Email: @Model.Email</li>
+        <li>Thời gian mong muốn: @(Model.PreferredTime?.ToString("dd/MM/yyyy HH:mm") ?? "-")</li>
+        <li>Mẫu xe: @(Model.ModelName ?? "-")</li>
+        <li>Mã phiếu: @Model.Id</li>
+    </ul>
+</div>
+<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-2">Về trang chủ</a>

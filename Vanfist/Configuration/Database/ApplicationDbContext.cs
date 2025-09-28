@@ -15,7 +15,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
-
+    public DbSet<TestDriveRequest> TestDriveRequests { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

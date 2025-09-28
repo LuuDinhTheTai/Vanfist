@@ -30,6 +30,19 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<RoleSeeder>();
 builder.Services.AddScoped<DatabaseSeeder>();
 
+// Register TestDrive
+builder.Services.AddScoped<ITestDriveRepository, TestDriveRepository>();
+builder.Services.AddScoped<ITestDriveService, TestDriveService>();
+
+builder.Services.Configure<LocalFileStorage.UploadsOptions>(
+    builder.Configuration.GetSection("Uploads"));
+
+builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+
+builder.Services.AddScoped<IModelRepository, ModelRepository>();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

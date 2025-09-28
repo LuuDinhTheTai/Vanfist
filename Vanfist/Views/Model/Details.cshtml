@@ -1,0 +1,81 @@
+﻿@model Vanfist.ViewModels.ModelDetailViewModel
+@{
+    ViewData["Title"] = $"Chi tiết: {Model.Model.Name}";
+    var images = Model.Attachments.Where(a => (a.ContentType ?? "").StartsWith("image")).ToList();
+    var docs = Model.Attachments.Where(a => !(a.ContentType ?? "").StartsWith("image")).ToList();
+}
+
+<h2 class="mb-3">@Model.Model.Name</h2>
+<div class="mb-2 text-muted">
+    Giá: @Model.Model.Price.ToString("N0") ₫
+    @if (Model.Model.Category != null)
+    {
+        <span class="ms-2 badge bg-secondary">@Model.Model.Category.Name</span>
+    }
+</div>
+
+@if (images.Any())
+{
+    <!-- Bootstrap carousel -->
+    <div id="modelCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @for (int i = 0; i < images.Count; i++)
+            {
+                var img = images[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@img.FilePath" class="d-block w-100" alt="@img.AltText" style="max-height:520px;object-fit:contain;">
+                    @if (!string.IsNullOrWhiteSpace(img.Title))
+                    {
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>@img.Title</h5>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#modelCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Prev</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#modelCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- thumbnails -->
+    <div class="row g-2 mt-2">
+        @for (int i = 0; i < images.Count; i++)
+        {
+            var img = images[i];
+            <div class="col-3 col-md-2">
+                <a href="#" data-bs-target="#modelCarousel" data-bs-slide-to="@i">
+                    <img src="@img.FilePath" class="img-fluid border" style="height:70px;object-fit:cover;">
+                </a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">Chưa có hình ảnh cho mẫu xe này.</div>
+}
+
+@if (docs.Any())
+{
+    <h5 class="mt-4">Tài liệu / Brochure</h5>
+    <ul>
+        @foreach (var d in docs)
+        {
+            var name = d.OriginalName ?? d.FileName;
+            if ((d.ContentType ?? "").Contains("pdf"))
+            {
+                <li>📄 <a href="@d.FilePath" target="_blank">@name</a></li>
+            }
+            else
+            {
+                <li>📎 <a href="@d.FilePath" target="_blank">@name</a></li>
+            }
+        }
+    </ul>
+}

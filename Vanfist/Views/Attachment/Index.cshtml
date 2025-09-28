@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Vanfist.Entities.Attachment>
+@{
+    ViewData["Title"] = "Quản lý tệp theo Model";
+    var modelId = (int)ViewBag.ModelId;
+}
+
+<h3>@ViewData["Title"] (Model #@modelId)</h3>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data" class="row g-2 mb-4">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="modelId" value="@modelId" />
+    <div class="col-md-3">
+        <input type="file" name="file" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="title" class="form-control" placeholder="Tiêu đề (tuỳ chọn)" />
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="altText" class="form-control" placeholder="Alt text (tuỳ chọn)" />
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-primary" type="submit">Tải lên</button>
+    </div>
+</form>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Preview</th>
+            <th>Tên gốc</th>
+            <th>Loại</th>
+            <th>Kích thước</th>
+            <th>Đường dẫn</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var f in Model)
+        {
+            <tr>
+                <td style="width:160px">
+                    @if ((f.ContentType ?? "").StartsWith("image"))
+                    {
+                        <img src="@f.FilePath" style="max-width:150px;max-height:100px" />
+                    }
+                    else
+                    {
+                        <a href="@f.FilePath" target="_blank">Mở</a>
+                    }
+                </td>
+                <td>@(f.OriginalName ?? f.FileName)</td>
+                <td>@(f.ContentType ?? f.Type)</td>
+                <td>@(f.Size / 1024) KB</td>
+                <td><code>@f.FilePath</code></td>
+                <td class="text-end">
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('Xoá file này?')">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@f.Id" />
+                        <input type="hidden" name="modelId" value="@modelId" />
+                        <button class="btn btn-sm btn-outline-danger">Xoá</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
