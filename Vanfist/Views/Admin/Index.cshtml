@@ -58,8 +58,8 @@
             <!-- Products -->
             <div id="section-products" class="card shadow-sm content-section" style="display:none;">
                 <div class="card-header bg-white fw-semibold">Quản lý sản phẩm</div>
-                <div class="card-body">
-                    <div class="text-muted">Danh sách sản phẩm sẽ hiển thị ở đây.</div>
+                <div class="card-body" id="products-container">
+                    <!-- Nội dung sẽ load qua Ajax -->
                 </div>
             </div>
 
@@ -99,10 +99,30 @@
                     e.preventDefault();
                     const section = this.getAttribute('data-section');
                     showSection(section);
+
+                    if (section === "products") {
+                        loadProducts(1);
+                    }
                 });
             });
 
-            // Default section
+            async function loadProducts(page) {
+                const response = await fetch(`/Admin/Products?page=${page}`);
+                const html = await response.text();
+                document.getElementById("products-container").innerHTML = html;
+
+                // Bắt sự kiện phân trang Ajax
+                document.querySelectorAll("#products-container .pagination a").forEach(a => {
+                    a.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const url = new URL(this.href);
+                        const page = url.searchParams.get("page");
+                        loadProducts(page);
+                    });
+                });
+            }
+
+            // Mặc định hiển thị Users
             showSection('users');
         });
     </script>

@@ -1,41 +1,36 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Vanfist.Constants;
-using Vanfist.Models;
 using Vanfist.Services;
 
-namespace Vanfist.Controllers;
-
-public class HomeController : Controller
+namespace Vanfist.Controllers
 {
-    private readonly IAccountService _accountService;
-
-    public HomeController(
-        IAccountService accountService)
+    public class HomeController : Controller
     {
-        _accountService = accountService;
-    }
+        private readonly IModelService _modelService;
+        private const int PageSize = 12; 
 
-    [AllowAnonymous]
-    [HttpGet]
-    public async Task<IActionResult> Index()
-    {
-        return View();
-    }
+        public HomeController(IModelService modelService)
+        {
+            _modelService = modelService;
+        }
 
-    [AllowAnonymous]
-    [HttpGet]
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        [HttpGet]
+        public async Task<IActionResult> Index(int page = 1)
+        {
+            var (models, totalCount) = await _modelService.GetPagedModelsAsync(page, PageSize);
 
-    [AllowAnonymous]
-    [HttpGet]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)PageSize);
+
+            return View(models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await _modelService.GetByIdAsync(id);
+            if (model == null) return NotFound();
+
+            return View(model);
+        }
     }
 }

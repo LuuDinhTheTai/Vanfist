@@ -8,7 +8,7 @@ public class Attachment
 
     [StringLength(255)] public string FileName { get; set; }
 
-    [Required, StringLength(255)] public string Type { get; set; }
+    [Required, StringLength(255)] public string Type { get; set; } = "image";
     
     public int ModelId { get; set; }
     public Model Model { get; set; }

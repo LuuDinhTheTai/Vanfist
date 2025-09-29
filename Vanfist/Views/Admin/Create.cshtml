@@ -1,0 +1,115 @@
+﻿@model Vanfist.DTOs.Requests.ModelRequest
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+    var categories = ViewBag.Categories as List<Vanfist.Entities.Category>;
+}
+
+<h2 class="mb-4">Thêm sản phẩm mới</h2>
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <!-- Tên sản phẩm -->
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="form-label">Tên sản phẩm</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- Giá -->
+    <div class="form-group mb-3">
+        <label asp-for="Price" class="form-label">Giá</label>
+        <input asp-for="Price" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- Kích thước -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="Length" class="form-label">Chiều dài</label>
+            <input asp-for="Length" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Length" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Width" class="form-label">Chiều rộng</label>
+            <input asp-for="Width" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Width" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Height" class="form-label">Chiều cao</label>
+            <input asp-for="Height" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Height" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Wheelbase -->
+    <div class="form-group mb-3">
+        <label asp-for="Wheelbase" class="form-label">Chiều dài cơ sở (Wheelbase)</label>
+        <input asp-for="Wheelbase" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Wheelbase" class="text-danger"></span>
+    </div>
+
+    <!-- NEDC -->
+    <div class="form-group mb-3">
+        <label asp-for="NEDC" class="form-label">NEDC (Km/lần sạc, 0 nếu xe xăng)</label>
+        <input asp-for="NEDC" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="NEDC" class="text-danger"></span>
+    </div>
+
+    <!-- Công suất & Mô-men xoắn -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="MaximumPower" class="form-label">Công suất tối đa (HP)</label>
+            <input asp-for="MaximumPower" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="MaximumPower" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="MaximumTorque" class="form-label">Mô-men xoắn tối đa (Nm)</label>
+            <input asp-for="MaximumTorque" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="MaximumTorque" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Vành -->
+    <div class="form-group mb-3">
+        <label asp-for="RimSize" class="form-label">Kích thước vành (RimSize)</label>
+        <input asp-for="RimSize" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="RimSize" class="text-danger"></span>
+    </div>
+
+    <!-- Màu sắc -->
+    <div class="form-group mb-3">
+        <label asp-for="Color" class="form-label">Màu sắc</label>
+        <input asp-for="Color" class="form-control" />
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+
+    <!-- Danh mục -->
+    <div class="form-group mb-3">
+        <label asp-for="CategoryId" class="form-label">Danh mục</label>
+        <select asp-for="CategoryId" class="form-select">
+            <option value="">-- Chọn danh mục --</option>
+            @if (categories != null)
+            {
+                foreach (var cat in categories)
+                {
+                    <option value="@cat.Id">@cat.Name</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <!-- Ảnh sản phẩm -->
+    <div class="form-group mb-3">
+        <label class="form-label">Ảnh sản phẩm</label>
+        <input type="file" name="imageFile" class="form-control" />
+        <span class="text-danger">@Html.ValidationMessage("ImageFile")</span>
+    </div>
+
+    <!-- Nút -->
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,114 @@
+﻿@model Vanfist.DTOs.Responses.ModelResponse
+
+<div class="container py-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden" data-aos="fade-up">
+        <div class="row g-0">
+            <!-- Image Carousel -->
+            <div class="col-md-6 bg-light d-flex align-items-center justify-content-center p-4" data-aos="zoom-in">
+                <div id="productCarousel" class="carousel slide w-100" data-bs-ride="carousel">
+                    <div class="carousel-inner text-center">
+                        @if (Model.Attachments != null && Model.Attachments.Any())
+                        {
+                            var index = 0;
+                            foreach (var img in Model.Attachments)
+                            {
+                                var fileName = string.IsNullOrEmpty(img) ? "no-image.png" : img;
+                                var path = Url.Content($"~/images/products/{fileName}");
+                                <div class="carousel-item @(index == 0 ? "active" : "")">
+                                    <img src="@path"
+                                         class="d-block mx-auto img-fluid rounded-3 product-image"
+                                         alt="@Model.Name" />
+                                </div>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <div class="carousel-item active">
+                                <img src="~/images/products/no-image.png"
+                                     class="d-block mx-auto img-fluid rounded-3 product-image"
+                                     alt="No Image" />
+                            </div>
+                        }
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                        <span class="visually-hidden">Trước</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                        <span class="visually-hidden">Tiếp</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-md-6 p-5" data-aos="fade-left">
+                <h2 class="fw-bold mb-2">@Model.Name</h2>
+                <span class="badge bg-success mb-3">Còn hàng</span>
+                <h3 class="text-danger fw-bold mb-4">
+                    @string.Format("{0:N0} VND", Model.Price)
+                </h3>
+
+                <div class="mb-4">
+                    <h5 class="fw-semibold mb-3">Thông số kỹ thuật</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="bi bi-arrows-fullscreen me-2 text-primary"></i><strong>Dài:</strong> @Model.Length mm</li>
+                        <li class="list-group-item"><i class="bi bi-arrows me-2"></i><strong>Rộng:</strong> @Model.Width mm</li>
+                        <li class="list-group-item"><i class="bi bi-arrows-vertical me-2"></i><strong>Cao:</strong> @Model.Height mm</li>
+                        <li class="list-group-item"><i class="bi bi-rulers me-2"></i><strong>Chiều dài cơ sở:</strong> @Model.Wheelbase mm</li>
+                        <li class="list-group-item"><i class="bi bi-fuel-pump me-2"></i><strong>NEDC:</strong> @Model.NEDC km</li>
+                        <li class="list-group-item"><i class="bi bi-lightning-charge me-2"></i><strong>Công suất:</strong> @Model.MaximumPower HP</li>
+                        <li class="list-group-item"><i class="bi bi-speedometer2 me-2"></i><strong>Mô-men xoắn:</strong> @Model.MaximumTorque Nm</li>
+                        <li class="list-group-item"><i class="bi bi-circle me-2"></i><strong>Rim Size:</strong> @Model.RimSize inch</li>
+                        <li class="list-group-item"><i class="bi bi-palette me-2"></i><strong>Màu sắc:</strong> @Model.Color</li>
+                        <li class="list-group-item"><i class="bi bi-tag me-2"></i><strong>Danh mục:</strong> @Model.CategoryName</li>
+                    </ul>
+                </div>
+
+                <div class="d-flex gap-3 mt-4">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg shadow-sm hover-rise">
+                        <i class="bi bi-arrow-left"></i> Quay lại
+                    </a>
+                    <a href="#" class="btn btn-primary btn-lg shadow-sm hover-rise">
+                        <i class="bi bi-cart-check"></i> Mua ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS -->
+<style>
+    .product-image {
+        max-height: 400px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+        .product-image:hover {
+            transform: scale(1.05);
+        }
+
+    .hover-rise {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .hover-rise:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+</style>
+
+<!-- AOS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true });
+</script>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
